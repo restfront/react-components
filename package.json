@@ -1,24 +1,29 @@
 {
-  "name": "react-components",
-  "version": "0.0.1",
+  "name": "restfront-react-components",
+  "version": "0.0.2",
   "description": "",
-  "main": "./lib/index.js",
+  "author": "Restfront, Ltd",
+  "license": "UNLICENSED",
+  "private": true,
+  "repository": "https://github.com/restfront/restfront-react-components",
+  "main": "lib/commonjs/index.js",
+  "jsnext:main": "lib/es/index.js",
   "scripts": {
     "build": "set \"NODE_ENV=production\" && gulp",
     "watch": "set \"NODE_ENV=development\" && gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Restfront, Ltd",
-  "license": "UNLICENSED",
   "dependencies": {
     "font-awesome": "4.6.3",
     "lodash": "4.15.0",
     "moment": "2.14.1",
-    "react": "15.3.1",
-    "react-addons-pure-render-mixin": "15.3.1",
-    "react-addons-shallow-compare": "15.3.1",
-    "react-dom": "15.3.1",
     "react-virtualized": "7.23.0"
+  },
+  "peerDependencies": {
+    "react": "^0.14.0 || ^15.0.0",
+    "react-addons-pure-render-mixin": "^0.14.0 || ^15.0.0",
+    "react-addons-shallow-compare": "^0.14.0 || ^15.0.0",
+    "react-dom": "^0.14.0 || ^15.0.0"
   },
   "devDependencies": {
     "babel-core": "6.13.2",
@@ -30,12 +35,17 @@
     "browserify": "13.1.0",
     "fs-extra": "0.30.0",
     "gulp": "3.9.1",
+    "gulp-babel": "6.1.2",
     "gulp-concat": "2.6.0",
     "gulp-html-replace": "1.6.1",
     "gulp-replace": "0.5.4",
     "gulp-sass": "2.3.2",
     "gulp-streamify": "1.0.2",
     "gulp-uglify": "2.0.0",
+    "react": "15.3.1",
+    "react-addons-pure-render-mixin": "15.3.1",
+    "react-addons-shallow-compare": "15.3.1",
+    "react-dom": "15.3.1",
     "vinyl-source-stream": "1.1.0",
     "watchify": "3.7.0",
     "yargs": "5.0.0"

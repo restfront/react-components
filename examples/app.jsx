@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-import { TimeEdit, Spinner, Grid } from '../lib';
+import { TimeEdit, Spinner, Grid } from '../lib/es';
 
 const gridData = generateTableData(100);
 

@@ -1,1 +1,1 @@
-# restfront-react-components
+# react-components
