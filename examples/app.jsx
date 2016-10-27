@@ -47,13 +47,69 @@ class App extends React.Component {
                 <hr/>
 
                 <div style={{width: 500, height: 300}}>
-                    <Grid
-                        dataSource={ gridData }
-                        columns={[
-                            { dataKey: 'name', label: 'Наименование', width: 200, minWidth: 400, flexGrow: 1 }
-                        ]}/>
+                    <SingleSelectionGrid data={ gridData } />
+                </div>
+
+                <div style={{width: 500, height: 300}}>
+                    <MultiSelectionGrid data={ gridData }/>
                 </div>
             </div>
+        );
+    }
+}
+
+class SingleSelectionGrid extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            selection: -1
+        };
+
+        this.onSelection = this.onSelection.bind(this);
+    }
+
+    onSelection(selection) {
+        this.setState({selection});
+    }
+
+    render() {
+        const { data } = this.props;
+
+        return (
+            <Grid dataSource={ data }
+                  selection={ this.state.selection } onSelection={ this.onSelection }
+                  columns={[
+                      { dataKey: 'name', label: 'Наименование', width: 200, minWidth: 400, flexGrow: 1 }
+                  ]}
+                />
+        );
+    }
+}
+
+class MultiSelectionGrid extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            selection: {}
+        };
+
+        this.onSelection = this.onSelection.bind(this);
+    }
+
+    onSelection(selection) {
+        this.setState({selection});
+    }
+
+    render() {
+        const { data } = this.props;
+
+        return (
+            <Grid dataSource={ data }
+                  selection={ this.state.selection } onSelection={ this.onSelection }
+                  columns={[
+                      { dataKey: 'name', label: 'Наименование', width: 200, minWidth: 400, flexGrow: 1 }
+                  ]}
+                />
         );
     }
 }
