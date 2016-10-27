@@ -15,6 +15,7 @@
     const babelify = require('babelify');
     const fsExtra = require('fs-extra');
     const yargsArgv = require('yargs').argv;
+    const browserSync = require('browser-sync').create();
 
     const NODE_ENV = (process.env.NODE_ENV || '').trim() || 'development';
     const BUILD_NUMBER = (process.env.BUILD_NUMBER || '').trim() || 'unknown';
@@ -35,27 +36,34 @@
         }
     };
 
-    const config = {
+    const CONFIG = {
         isDebug: false,
         serverUrl: '',
         version: '',
         babel: {
             ignore: /node_modules/,
             presets: ['es2015', 'react', 'stage-2']
+        },
+        browserSync: {
+            port: 13072,
+            open: false,
+            server: {
+                baseDir: CONST.examples.DEST
+            }
         }
     };
 
     gulp.task('default', function () {
         if (NODE_ENV === 'production') {
-            config.isDebug = false;
-            config.serverUrl = '';
-            config.version = yargsArgv.ver || BUILD_NUMBER;
+            CONFIG.isDebug = false;
+            CONFIG.serverUrl = '';
+            CONFIG.version = yargsArgv.ver || BUILD_NUMBER;
 
             return gulp.start('production');
         } else {
-            config.isDebug = true;
-            config.serverUrl = 'http://localhost:13070';
-            config.version = 'dev';
+            CONFIG.isDebug = true;
+            CONFIG.serverUrl = 'http://localhost:13070';
+            CONFIG.version = 'dev';
 
             return gulp.start('watch');
         }
@@ -74,6 +82,8 @@
         gulp.watch(CONST.examples.HTML, ['examples:html']);
         gulp.watch(CONST.examples.SOURCE_STYLES, ['examples:styles']);
 
+        browserSync.init(CONFIG.browserSync);
+
         var watcher = watchify(
             createBrowserify()
         );
@@ -86,7 +96,8 @@
                         console.error(e.toString());
                     })
                     .pipe(vinylSourceStream(CONST.examples.OUT))
-                    .pipe(gulp.dest(CONST.examples.DEST_SCRIPTS));
+                    .pipe(gulp.dest(CONST.examples.DEST_SCRIPTS))
+                    .pipe(browserSync.stream());
                 console.log('[' + new Date() + '] Updated');
             })
             .bundle()
@@ -94,13 +105,15 @@
                 console.error(e.toString());
             })
             .pipe(vinylSourceStream(CONST.examples.OUT))
-            .pipe(gulp.dest(CONST.examples.DEST_SCRIPTS));
+            .pipe(gulp.dest(CONST.examples.DEST_SCRIPTS))
+            .pipe(browserSync.stream());
     });
 
     gulp.task('lib', function () {
         return gulp.src(CONST.lib.SRC)
-            .pipe(gulpBabel(config.babel))
-            .pipe(gulp.dest(CONST.lib.DEST));
+            .pipe(gulpBabel(CONFIG.babel))
+            .pipe(gulp.dest(CONST.lib.DEST))
+            .pipe(browserSync.stream());
     });
 
     gulp.task('examples:html', function () {
@@ -108,16 +121,18 @@
             .pipe(gulpHtmlReplace({
                 'js': CONST.examples.OUT
             }))
-            .pipe(gulpReplace('@@gulpServerUrl', config.serverUrl))
-            .pipe(gulpReplace('@@gulpVersion', config.version))
-            .pipe(gulp.dest(CONST.examples.DEST));
+            .pipe(gulpReplace('@@gulpServerUrl', CONFIG.serverUrl))
+            .pipe(gulpReplace('@@gulpVersion', CONFIG.version))
+            .pipe(gulp.dest(CONST.examples.DEST))
+            .pipe(browserSync.stream());
     });
 
     gulp.task('examples:styles', function () {
         return gulp.src(CONST.examples.SOURCE_STYLES)
             .pipe(gulpSass())
             .pipe(gulpConcat('app.css'))
-            .pipe(gulp.dest(CONST.examples.DEST_STYLES));
+            .pipe(gulp.dest(CONST.examples.DEST_STYLES))
+            .pipe(browserSync.stream());
     });
 
     /* Копирование сторонних библиотек из node_modules */
@@ -151,14 +166,14 @@
         var params = {
             entries: [CONST.examples.ENTRY_POINT],
             transform: [
-                babelify.configure(config.babel)
+                babelify.configure(CONFIG.babel)
             ],
             require: [
                 /*'jszip'*/
             ]
         };
 
-        if (config.isDebug) {
+        if (CONFIG.isDebug) {
             params.debug = true;
             params.cache = {};
             params.packageCache = {};
