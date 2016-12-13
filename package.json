@@ -1,6 +1,6 @@
 {
   "name": "restfront-react-components",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "",
   "author": "Restfront, Ltd",
   "license": "UNLICENSED",
@@ -14,6 +14,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "classnames": "2.2.5",
     "font-awesome": "4.6.3",
     "lodash": "4.15.0",
     "moment": "2.14.1",

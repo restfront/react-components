@@ -109,6 +109,7 @@ class MultiSelectionGrid extends React.Component {
                   columns={[
                       { dataKey: 'name', label: 'Наименование', width: 200, minWidth: 400, flexGrow: 1 }
                   ]}
+                  className='striped'
                 />
         );
     }
